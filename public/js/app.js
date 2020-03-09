@@ -2177,20 +2177,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     submitForm: function submitForm() {
-      var _this = this;
-
-      axios.get("/airlock/csrf-cookie").then(function (response) {
-        axios.post("api/register", {
-          name: _this.name,
-          email: _this.email,
-          password: _this.password,
-          password_confirmation: _this.confirmpassword
-        }).then(function (response) {
-          router.push('/dashboard');
-        })["catch"](function (error) {
-          console.log("CATCH");
-          console.log(error);
-        });
+      axios.post("api/register", {
+        name: this.name,
+        email: this.email,
+        password: this.password,
+        password_confirmation: this.confirmpassword
+      }).then(function (response) {
+        $router.push("/dashboard");
+      })["catch"](function (error) {
+        console.log("CATCH");
+        console.log(error);
       });
     }
   }

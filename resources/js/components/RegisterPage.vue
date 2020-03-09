@@ -122,22 +122,20 @@ export default {
   },
   methods: {
     submitForm: function() {
-      axios.get("/airlock/csrf-cookie").then(response => {
-        axios
-          .post("api/register", {
-            name: this.name,
-            email: this.email,
-            password: this.password,
-            password_confirmation: this.confirmpassword
-          })
-          .then(response => {
-            router.push('/dashboard')
-          })
-          .catch(error => {
-            console.log("CATCH");
-            console.log(error);
-          });
-      });
+      axios
+        .post("api/register", {
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          password_confirmation: this.confirmpassword
+        })
+        .then(response => {
+          $router.push("/dashboard");
+        })
+        .catch(error => {
+          console.log("CATCH");
+          console.log(error);
+        });
     }
   }
 };
