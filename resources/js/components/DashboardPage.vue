@@ -1,18 +1,25 @@
 <template>
-  <div class="row">
-    <div class="col-4">DASHBOARD</div>
-    <router-link to="/">
-      <div class="col-4" @click="logout">LOGOUT</div>
-    </router-link>
-    <div class="col-4"></div>
+  <div>
+    <div class="row">
+      <div class="col-12 d-flex justify-content-between">
+        <div class="col-4">DASHBOARD</div>
+        <div class="offset-4 col-4 text-right" @click="logout">LOGOUT</div>
+      </div>
+    </div>
+    <UsersTable />
   </div>
 </template>
 
 <script>
+import UsersTable from "./UsersTable";
+
 export default {
+  components: {
+    UsersTable
+  },
   methods: {
     logout: function() {
-      axios.post("api/logout").then();
+      axios.post("api/logout").then(this.$router.push("/"));
     }
   }
 };

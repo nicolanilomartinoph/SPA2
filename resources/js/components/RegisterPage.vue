@@ -7,29 +7,39 @@
 
           <div class="card-body">
             <form @submit.prevent="submitForm">
-              <!-- action="{{ route('register') }}" -->
-
               <div class="form-group row">
-                <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
+                <label for="username" class="col-md-4 col-form-label text-md-right">Username</label>
 
                 <div class="col-md-6">
                   <input
-                    v-model="name"
-                    id="name"
+                    v-model="username"
+                    id="username"
                     type="text"
                     class="form-control"
-                    name="name"
+                    name="username"
                     value
                     required
-                    autocomplete="name"
+                    autocomplete="username"
                     autofocus
                   />
-                  <!--
-                  @error('name')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
-                  @enderror-->
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="fullname" class="col-md-4 col-form-label text-md-right">Fullname</label>
+
+                <div class="col-md-6">
+                  <input
+                    v-model="fullname"
+                    id="fullname"
+                    type="text"
+                    class="form-control"
+                    name="fullname"
+                    value
+                    required
+                    autocomplete="fullname"
+                    autofocus
+                  />
                 </div>
               </div>
 
@@ -47,12 +57,6 @@
                     required
                     autocomplete="email"
                   />
-                  <!--
-                  @error('email')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
-                  @enderror-->
                 </div>
               </div>
 
@@ -69,12 +73,6 @@
                     required
                     autocomplete="new-password"
                   />
-                  <!--
-                  @error('password')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
-                  @enderror-->
                 </div>
               </div>
 
@@ -115,7 +113,8 @@ import router from "../router";
 export default {
   data: function() {
     return {
-      name: "",
+      username: "",
+      fullname: "",
       email: "",
       password: "",
       confirmpassword: ""
@@ -124,7 +123,8 @@ export default {
   methods: {
     submitForm: function() {
       const register = axios.post("api/register", {
-        name: this.name,
+        username: this.username,
+        fullname: this.fullname,
         email: this.email,
         password: this.password,
         password_confirmation: this.confirmpassword
