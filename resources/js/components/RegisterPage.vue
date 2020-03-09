@@ -123,21 +123,19 @@ export default {
   },
   methods: {
     submitForm: function() {
-      const test = axios.post("api/register", {
+      const register = axios.post("api/register", {
         name: this.name,
         email: this.email,
         password: this.password,
         password_confirmation: this.confirmpassword
       });
 
-      test
+      register
         .then(response => {
-          console.log("Login");
           this.$router.push("/dashboard");
         })
         .catch(error => {
-          console.log("Login failed");
-          this.$router.push("/dashboard");
+          this.$router.push("/register");
         });
     }
   }

@@ -2033,14 +2033,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     submitForm: function submitForm() {
-      var test = axios.post("/api/login", {
+      var _this = this;
+
+      var login = axios.post("/api/login", {
         email: this.email,
         password: this.password
       });
-      test.then(function (response) {
-        console.log(response);
+      login.then(function (response) {
+        _this.$router.push("/dashboard");
       })["catch"](function (error) {
-        console.log(response);
+        _this.$router.push("/login");
       });
     }
   }
@@ -2184,20 +2186,16 @@ __webpack_require__.r(__webpack_exports__);
     submitForm: function submitForm() {
       var _this = this;
 
-      var test = axios.post("api/register", {
+      var register = axios.post("api/register", {
         name: this.name,
         email: this.email,
         password: this.password,
         password_confirmation: this.confirmpassword
       });
-      test.then(function (response) {
-        console.log("Login");
-
+      register.then(function (response) {
         _this.$router.push("/dashboard");
       })["catch"](function (error) {
-        console.log("Login failed");
-
-        _this.$router.push("/dashboard");
+        _this.$router.push("/register");
       });
     }
   }

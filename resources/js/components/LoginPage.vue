@@ -95,17 +95,17 @@ export default {
   },
   methods: {
     submitForm: function() {
-      const test = axios.post("/api/login", {
+      const login = axios.post("/api/login", {
         email: this.email,
         password: this.password
       });
 
-      test
+      login
         .then(response => {
-          console.log(response);
+          this.$router.push("/dashboard");
         })
         .catch(error => {
-          console.log(response);
+          this.$router.push("/login");
         });
     }
   }
