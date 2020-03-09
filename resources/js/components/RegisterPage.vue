@@ -111,6 +111,7 @@
 </template>
 
 <script>
+import router from "../router";
 export default {
   data: function() {
     return {
@@ -122,19 +123,21 @@ export default {
   },
   methods: {
     submitForm: function() {
-      axios
-        .post("api/register", {
-          name: this.name,
-          email: this.email,
-          password: this.password,
-          password_confirmation: this.confirmpassword
-        })
+      const test = axios.post("api/register", {
+        name: this.name,
+        email: this.email,
+        password: this.password,
+        password_confirmation: this.confirmpassword
+      });
+
+      test
         .then(response => {
-          $router.push("/dashboard");
+          console.log("Login");
+          this.$router.push("/dashboard");
         })
         .catch(error => {
-          console.log("CATCH");
-          console.log(error);
+          console.log("Login failed");
+          this.$router.push("/dashboard");
         });
     }
   }

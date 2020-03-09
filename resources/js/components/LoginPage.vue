@@ -95,12 +95,16 @@ export default {
   },
   methods: {
     submitForm: function() {
-      axios
-        .post("/api/login", {
-          email: this.email,
-          password: this.password
-        })
+      const test = axios.post("/api/login", {
+        email: this.email,
+        password: this.password
+      });
+
+      test
         .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
           console.log(response);
         });
     }

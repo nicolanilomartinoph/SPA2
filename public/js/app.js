@@ -2033,10 +2033,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     submitForm: function submitForm() {
-      axios.post("/api/login", {
+      var test = axios.post("/api/login", {
         email: this.email,
         password: this.password
-      }).then(function (response) {
+      });
+      test.then(function (response) {
+        console.log(response);
+      })["catch"](function (error) {
         console.log(response);
       });
     }
@@ -2054,6 +2057,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../router */ "./resources/js/router.js");
 //
 //
 //
@@ -2166,6 +2170,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2177,16 +2182,22 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     submitForm: function submitForm() {
-      axios.post("api/register", {
+      var _this = this;
+
+      var test = axios.post("api/register", {
         name: this.name,
         email: this.email,
         password: this.password,
         password_confirmation: this.confirmpassword
-      }).then(function (response) {
-        $router.push("/dashboard");
+      });
+      test.then(function (response) {
+        console.log("Login");
+
+        _this.$router.push("/dashboard");
       })["catch"](function (error) {
-        console.log("CATCH");
-        console.log(error);
+        console.log("Login failed");
+
+        _this.$router.push("/dashboard");
       });
     }
   }
