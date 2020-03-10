@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -50,8 +51,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
-            'fullname' => ['required', 'string', 'max:255', 'unique:users'],
+            'username' => ['required', 'string', 'min:4', 'max:255', 'unique:users'],
+            'fullname' => ['required', 'string', 'min:4', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -71,5 +72,19 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+
+    /**
+     * An Asynchronous method for checking the uniqueness of the username
+     * 
+     * @return boolean
+     */
+    public function isUniqueUsername(Request $data)
+    {
+        $validatedData = $data->validate([
+            'username' => 'required, unique:users, min: 8,max: 255'
+        ]);
+        dd($validatedData);
+        return "TEST";
     }
 }
