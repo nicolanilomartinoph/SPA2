@@ -75,16 +75,20 @@ class RegisterController extends Controller
     }
 
     /**
-     * An Asynchronous method for checking the uniqueness of the username
+     * An Asynchronous method for checking the uniqueness of the input
      * 
      * @return boolean
      */
-    public function isUniqueUsername(Request $data)
+    public function isUnique(Request $request)
     {
-        $validatedData = $data->validate([
-            'username' => 'required, unique:users, min: 8,max: 255'
+        $validator = Validator::make($request->all(), [
+            (array_keys($request->input()))[0] => 'unique:users'
         ]);
-        dd($validatedData);
-        return "TEST";
+
+        if ($validator->fails()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

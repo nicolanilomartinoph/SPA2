@@ -18,7 +18,7 @@
                     type="text"
                     class="form-control"
                     :class="{
-                      'is-invalid': $v.form.username.$error, //$v.form.username.$dirty && $v.form.username.$invalid,
+                      'is-invalid': $v.form.username.$error, 
                       'is-valid': !$v.form.username.$invalid
                     }"
                     name="username"
@@ -43,6 +43,13 @@
                       <li
                         v-if="$v.form.username.$invalid && $v.form.username.$pending"
                       >Checking availability...</li>
+                      <li
+                        v-if="!$v.form.username.isUnique && 
+                        !$v.form.username.$pending &&
+                        $v.form.username.maxLength && 
+                        $v.form.username.minLength && 
+                        $v.form.username.alphaNum"
+                      >{{this.form.username}} is already in use.</li>
                     </ul>
                   </div>
                 </div>
@@ -96,6 +103,10 @@
                     id="email"
                     type="email"
                     class="form-control"
+                    :class="{
+                      'is-invalid': $v.form.email.$error,
+                      'is-valid': !$v.form.email.$invalid
+                    }"
                     name="email"
                     value
                     required
@@ -108,8 +119,18 @@
                     >
                       <li v-if="!$v.form.email.required">Email is required.</li>
                       <li v-if="!$v.form.email.minLength">Email must be minimum of 4 characters.</li>
-                      <li v-if="!$v.form.email.email">Email must be a valid e-mail format.</li>
                       <li v-if="!$v.form.email.maxLength">Email cannot exceed 255 characters.</li>
+                      <li v-if="!$v.form.email.email">Invalid e-mail format.</li>
+                      <li
+                        v-if="$v.form.email.$invalid && $v.form.email.$pending"
+                      >Checking availability...</li>
+                      <li
+                        v-if="!$v.form.email.isUnique && 
+                        !$v.form.email.$pending &&
+                        $v.form.email.maxLength && 
+                        $v.form.email.minLength && 
+                        $v.form.email.email"
+                      >{{this.form.email}} is already in use.</li>
                     </ul>
                   </div>
                 </div>
@@ -200,6 +221,7 @@
 
 <script>
 import router from "../router";
+import _ from 'lodash';
 import {
   required,
   minLength,
@@ -221,19 +243,9 @@ export default {
       }
     };
   },
-  computed: {
-    uniqueUsername: function() {
-      //axios.post("api/uniqueUsername", {
-      //  data: "TEST"
-      //});
-    }
-  },
-  created() {
-    console.log(this.$v.form.username);
-  },
   methods: {
     submitForm: function() {
-      const register = axios.post("api/register", {
+      const register = axios.get("/api/register", {
         username: this.form.username,
         fullname: this.form.fullname,
         email: this.form.email,
@@ -248,7 +260,28 @@ export default {
         .catch(error => {
           this.$router.push("/register");
         });
-    }
+    },
+    isUnique: _.throttle((value, key, resolve, reject) => {
+      axios
+        .get("api/isUnique", {
+          params: {
+            [`${key}`]: value
+          }
+        })
+        .then(response => {
+          if (response.data) {
+            console.log(`${value} is unique.`);
+            resolve(true);
+          } else {
+            console.log(`${value} is not unique.`);
+            resolve(false);
+          }
+        })
+        .catch(error => {
+          console.log("Error in checking uniqueness");
+          reject(false);
+        });
+      }, 1500)
   },
   validations: {
     form: {
@@ -257,19 +290,15 @@ export default {
         minLength: minLength(4),
         alphaNum,
         maxLength: maxLength(255),
-        isUnique() {
+        isUnique(value) {
           const req = this.$v.form.username.required;
           const min = this.$v.form.username.minLength;
           const max = this.$v.form.username.maxLength;
           const alphaNum = this.$v.form.username.alphaNum;
-
+          
           if (req && min && max && alphaNum) {
             return new Promise((resolve, reject) => {
-              const isUniqueUsername = axios.get("api/isUniqueUsername", {
-                username: this.$v.form.username.$model
-              });
-
-              console.log(isUniqueUsername);
+              this.isUnique(value, "username",resolve, reject)
             });
           } else {
             return false;
@@ -285,7 +314,21 @@ export default {
         required,
         email,
         minLength: minLength(4),
-        maxLength: maxLength(255)
+        maxLength: maxLength(255),
+        isUnique(value) {
+          const req = this.$v.form.email.required;
+          const min = this.$v.form.email.minLength;
+          const max = this.$v.form.email.maxLength;
+          const email = this.$v.form.email.email;
+
+          if (req && min && max && email) {
+            return new Promise((resolve, reject) => {
+              this.isUnique(value, "email",resolve, reject)
+            });
+          } else {
+            return false;
+          }
+        }
       },
       password: {
         required,

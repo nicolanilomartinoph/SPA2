@@ -2067,8 +2067,12 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../router */ "./resources/js/router.js");
-/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
-/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2269,6 +2273,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2283,20 +2309,11 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
-  computed: {
-    uniqueUsername: function uniqueUsername() {//axios.post("api/uniqueUsername", {
-      //  data: "TEST"
-      //});
-    }
-  },
-  created: function created() {
-    console.log(this.$v.form.username);
-  },
   methods: {
     submitForm: function submitForm() {
       var _this = this;
 
-      var register = axios.post("api/register", {
+      var register = axios.get("/api/register", {
         username: this.form.username,
         fullname: this.form.fullname,
         email: this.form.email,
@@ -2308,16 +2325,32 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         _this.$router.push("/register");
       });
-    }
+    },
+    isUnique: lodash__WEBPACK_IMPORTED_MODULE_1___default.a.throttle(function (value, key, resolve, reject) {
+      axios.get("api/isUnique", {
+        params: _defineProperty({}, "".concat(key), value)
+      }).then(function (response) {
+        if (response.data) {
+          console.log("".concat(value, " is unique."));
+          resolve(true);
+        } else {
+          console.log("".concat(value, " is not unique."));
+          resolve(false);
+        }
+      })["catch"](function (error) {
+        console.log("Error in checking uniqueness");
+        reject(false);
+      });
+    }, 1500)
   },
   validations: {
     form: {
       username: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(4),
-        alphaNum: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["alphaNum"],
-        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["maxLength"])(255),
-        isUnique: function isUnique() {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"],
+        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["minLength"])(4),
+        alphaNum: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["alphaNum"],
+        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["maxLength"])(255),
+        isUnique: function isUnique(value) {
           var _this2 = this;
 
           var req = this.$v.form.username.required;
@@ -2327,10 +2360,7 @@ __webpack_require__.r(__webpack_exports__);
 
           if (req && min && max && alphaNum) {
             return new Promise(function (resolve, reject) {
-              var isUniqueUsername = axios.get("api/isUniqueUsername", {
-                username: _this2.$v.form.username.$model
-              });
-              console.log(isUniqueUsername);
+              _this2.isUnique(value, "username", resolve, reject);
             });
           } else {
             return false;
@@ -2338,26 +2368,42 @@ __webpack_require__.r(__webpack_exports__);
         }
       },
       fullname: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(4),
-        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["maxLength"])(255)
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"],
+        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["minLength"])(4),
+        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["maxLength"])(255)
       },
       email: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-        email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["email"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(4),
-        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["maxLength"])(255)
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"],
+        email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["email"],
+        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["minLength"])(4),
+        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["maxLength"])(255),
+        isUnique: function isUnique(value) {
+          var _this3 = this;
+
+          var req = this.$v.form.email.required;
+          var min = this.$v.form.email.minLength;
+          var max = this.$v.form.email.maxLength;
+          var email = this.$v.form.email.email;
+
+          if (req && min && max && email) {
+            return new Promise(function (resolve, reject) {
+              _this3.isUnique(value, "email", resolve, reject);
+            });
+          } else {
+            return false;
+          }
+        }
       },
       password: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(8),
-        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["maxLength"])(255)
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"],
+        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["minLength"])(8),
+        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["maxLength"])(255)
       },
       confirm_password: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-        sameAs: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["sameAs"])("password"),
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(8),
-        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["maxLength"])(255)
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"],
+        sameAs: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["sameAs"])("password"),
+        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["minLength"])(8),
+        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["maxLength"])(255)
       }
     }
   }
@@ -38086,7 +38132,7 @@ var render = function() {
                       ],
                       staticClass: "form-control",
                       class: {
-                        "is-invalid": _vm.$v.form.username.$error, //$v.form.username.$dirty && $v.form.username.$invalid,
+                        "is-invalid": _vm.$v.form.username.$error,
                         "is-valid": !_vm.$v.form.username.$invalid
                       },
                       attrs: {
@@ -38154,6 +38200,19 @@ var render = function() {
                               _vm.$v.form.username.$invalid &&
                               _vm.$v.form.username.$pending
                                 ? _c("li", [_vm._v("Checking availability...")])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              !_vm.$v.form.username.isUnique &&
+                              !_vm.$v.form.username.$pending &&
+                              _vm.$v.form.username.maxLength &&
+                              _vm.$v.form.username.minLength &&
+                              _vm.$v.form.username.alphaNum
+                                ? _c("li", [
+                                    _vm._v(
+                                      _vm._s(this.form.username) +
+                                        " is already in use."
+                                    )
+                                  ])
                                 : _vm._e()
                             ]
                           )
@@ -38276,6 +38335,10 @@ var render = function() {
                         }
                       ],
                       staticClass: "form-control",
+                      class: {
+                        "is-invalid": _vm.$v.form.email.$error,
+                        "is-valid": !_vm.$v.form.email.$invalid
+                      },
                       attrs: {
                         id: "email",
                         type: "email",
@@ -38320,18 +38383,32 @@ var render = function() {
                                   ])
                                 : _vm._e(),
                               _vm._v(" "),
-                              !_vm.$v.form.email.email
-                                ? _c("li", [
-                                    _vm._v(
-                                      "Email must be a valid e-mail format."
-                                    )
-                                  ])
-                                : _vm._e(),
-                              _vm._v(" "),
                               !_vm.$v.form.email.maxLength
                                 ? _c("li", [
                                     _vm._v(
                                       "Email cannot exceed 255 characters."
+                                    )
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              !_vm.$v.form.email.email
+                                ? _c("li", [_vm._v("Invalid e-mail format.")])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.$v.form.email.$invalid &&
+                              _vm.$v.form.email.$pending
+                                ? _c("li", [_vm._v("Checking availability...")])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              !_vm.$v.form.email.isUnique &&
+                              !_vm.$v.form.email.$pending &&
+                              _vm.$v.form.email.maxLength &&
+                              _vm.$v.form.email.minLength &&
+                              _vm.$v.form.email.email
+                                ? _c("li", [
+                                    _vm._v(
+                                      _vm._s(this.form.email) +
+                                        " is already in use."
                                     )
                                   ])
                                 : _vm._e()
