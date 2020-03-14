@@ -75,7 +75,7 @@ class RegisterController extends Controller
     }
 
     /**
-     * An Asynchronous method for checking the uniqueness of the input
+     * An Asynchronous method for validating the uniqueness of the input before submission
      * 
      * @return boolean
      */

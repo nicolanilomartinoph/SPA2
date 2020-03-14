@@ -24,8 +24,8 @@ import User from "./User";
 
 export default {
   components: { User },
-  created: function() {
-    //axios.post( get all users)
+  created() {
+    axios.get("api/userList");
   }
 };
 </script>

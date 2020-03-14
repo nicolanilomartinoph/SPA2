@@ -146,6 +146,10 @@
                     id="password"
                     type="password"
                     class="form-control"
+                    :class="{
+                      'is-invalid': $v.form.password.$error,
+                      'is-valid': !$v.form.password.$invalid
+                    }"
                     name="password"
                     required
                     autocomplete="new-password"
@@ -178,6 +182,10 @@
                     id="password-confirm"
                     type="password"
                     class="form-control"
+                    :class="{
+                      'is-invalid': $v.form.confirm_password.$error,
+                      'is-valid': !$v.form.confirm_password.$invalid
+                    }"
                     name="confirm_password"
                     required
                     autocomplete="new-password"
@@ -221,7 +229,7 @@
 
 <script>
 import router from "../router";
-import _ from 'lodash';
+import _ from "lodash";
 import {
   required,
   minLength,
@@ -245,7 +253,7 @@ export default {
   },
   methods: {
     submitForm: function() {
-      const register = axios.get("/api/register", {
+      const register = axios.post("/api/register", {
         username: this.form.username,
         fullname: this.form.fullname,
         email: this.form.email,
@@ -258,6 +266,7 @@ export default {
           this.$router.push("/dashboard");
         })
         .catch(error => {
+          console.log("in error submit FORM");
           this.$router.push("/register");
         });
     },
@@ -281,7 +290,7 @@ export default {
           console.log("Error in checking uniqueness");
           reject(false);
         });
-      }, 1500)
+    }, 1500)
   },
   validations: {
     form: {
@@ -295,10 +304,10 @@ export default {
           const min = this.$v.form.username.minLength;
           const max = this.$v.form.username.maxLength;
           const alphaNum = this.$v.form.username.alphaNum;
-          
+
           if (req && min && max && alphaNum) {
             return new Promise((resolve, reject) => {
-              this.isUnique(value, "username",resolve, reject)
+              this.isUnique(value, "username", resolve, reject);
             });
           } else {
             return false;
@@ -323,7 +332,7 @@ export default {
 
           if (req && min && max && email) {
             return new Promise((resolve, reject) => {
-              this.isUnique(value, "email",resolve, reject)
+              this.isUnique(value, "email", resolve, reject);
             });
           } else {
             return false;
@@ -344,15 +353,4 @@ export default {
     }
   }
 };
-
-/*
-basic validator for username:
-- (onChange) not null, min of 4 char
-- (onChange) must not start with a number
-- (onChange) no spaces
-- (onChange) no special chars
-- (debounce) unique
-
-- username and email must be validated on the server asynchronously
-*/
 </script>

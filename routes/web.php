@@ -14,3 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/{any}', 'AppController@index')->where('any', '(.*)')->middleware('guest');
+Route::get('/isUnique', 'Auth\RegisterController@isUnique');
+
+Route::get('/dashboard', 'DashboardController@index');
+Route::get('/userList', 'DashboardController@index');

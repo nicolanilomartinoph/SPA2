@@ -21,6 +21,17 @@ export default {
     logout: function() {
       axios.post("api/logout").then(this.$router.push("/"));
     }
+  },
+  created() {
+    axios
+      .get("api/user", {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer ".$accessToken
+        }
+      })
+      .then(response => console.log(response.data))
+      .catch(error => console.log(error));
   }
 };
 </script>
