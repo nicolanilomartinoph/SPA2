@@ -34,6 +34,7 @@ const app = new Vue({
         </div>`
 });
 
+<<<<<<< HEAD
 // Encryption keys generated successfully.
 // Personal access client created successfully.
 // Client ID: 1
@@ -42,4 +43,7 @@ const app = new Vue({
 // Password grant client created successfully.
 // Client ID: 2
 // Client secret: 1tKu0JXEe3h6P8Jvq5OzR4EOFfI8yiOCeUhcxDvp
+=======
+
+>>>>>>> parent of 4e12655... throttled isUnique fn
 

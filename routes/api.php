@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,11 +16,16 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+Route::get('/uniqueUsername', 'RegisterController@isUniqueUsername')->middleware('guest');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+<<<<<<< HEAD
 
 Route::get('/isUnique', 'Auth\RegisterController@isUnique');
 
 Route::get('/dashboard', 'DashboardController@index');
 Route::get('/userList', 'DashboardController@index');
+=======
+>>>>>>> parent of 4e12655... throttled isUnique fn

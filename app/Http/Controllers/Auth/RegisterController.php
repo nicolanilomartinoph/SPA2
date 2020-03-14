@@ -75,20 +75,20 @@ class RegisterController extends Controller
     }
 
     /**
+<<<<<<< HEAD
      * An Asynchronous method for validating the uniqueness of the input before submission
+=======
+     * An Asynchronous method for checking the uniqueness of the username
+>>>>>>> parent of 4e12655... throttled isUnique fn
      * 
      * @return boolean
      */
-    public function isUnique(Request $request)
+    public function isUniqueUsername(Request $data)
     {
-        $validator = Validator::make($request->all(), [
-            (array_keys($request->input()))[0] => 'unique:users'
+        $validatedData = $data->validate([
+            'username' => 'required, unique:users, min: 8,max: 255'
         ]);
-
-        if ($validator->fails()) {
-            return false;
-        } else {
-            return true;
-        }
+        dd($validatedData);
+        return "TEST";
     }
 }
